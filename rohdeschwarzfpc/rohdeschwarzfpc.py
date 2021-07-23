@@ -17,7 +17,7 @@ class FPC:
     """
     comm = None
 
-    def __init__(self, address: str = 'TCPIP0::172.16.10.10::inst0::INSTR'):
+    def __init__(self, address: str = r'TCPIP0::172.16.10.10::inst0::INSTR'):
         rm = pyvisa.ResourceManager()
         self.comm = rm.open_resource(address)
 
