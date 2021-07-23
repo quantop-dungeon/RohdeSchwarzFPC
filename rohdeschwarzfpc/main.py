@@ -75,103 +75,103 @@ class FPC:
     # Setter and getter methods for the instrument parameters
 
     def set_start_freq(self, x: Union[float, str]) -> None:
-        """Sets start frequency (Hz)."""
+        """Sets the start frequency (Hz)."""
         self.comm.write('FREQuency:STARt %s' % str(x))
 
     def get_start_freq(self) -> float:
-        """Reads start frequency (Hz)."""
+        """Reads the start frequency (Hz)."""
         x = self.comm.query('FREQuency:STARt?')
-
+        
         # Converts the result to the expected type,
         # if fails, returns the raw string.
         try:
             x = float(x)
         except ValueError:
             x = x.strip()
-
+        
         return x
 
     def set_stop_freq(self, x: Union[float, str]) -> None:
-        """Sets stop frequency (Hz)."""
+        """Sets the stop frequency (Hz)."""
         self.comm.write('FREQuency:STOP %s' % str(x))
 
     def get_stop_freq(self) -> float:
-        """Reads stop frequency (Hz)."""
+        """Reads the stop frequency (Hz)."""
         x = self.comm.query('FREQuency:STOP?')
-
+        
         # Converts the result to the expected type,
         # if fails, returns the raw string.
         try:
             x = float(x)
         except ValueError:
             x = x.strip()
-
+        
         return x
 
     def set_cent_freq(self, x: Union[float, str]) -> None:
-        """Sets center frequency (Hz)."""
+        """Sets the center frequency (Hz)."""
         self.comm.write('FREQuency:CENTer %s' % str(x))
 
     def get_cent_freq(self) -> float:
-        """Reads center frequency (Hz)."""
+        """Reads the center frequency (Hz)."""
         x = self.comm.query('FREQuency:CENTer?')
-
+        
         # Converts the result to the expected type,
         # if fails, returns the raw string.
         try:
             x = float(x)
         except ValueError:
             x = x.strip()
-
+        
         return x
 
     def set_span(self, x: Union[float, str]) -> None:
-        """Sets span (Hz)."""
+        """Sets the span (Hz)."""
         self.comm.write('FREQuency:SPAN %s' % str(x))
 
     def get_span(self) -> float:
-        """Reads span (Hz)."""
+        """Reads the span (Hz)."""
         x = self.comm.query('FREQuency:SPAN?')
-
+        
         # Converts the result to the expected type,
         # if fails, returns the raw string.
         try:
             x = float(x)
         except ValueError:
             x = x.strip()
-
+        
         return x
 
     def set_rbw(self, x: Union[float, str]) -> None:
-        """Sets resolution bandwidth (Hz)."""
+        """Sets the resolution bandwidth (Hz)."""
         self.comm.write('BWIDth:RESolution %s' % str(x))
 
     def get_rbw(self) -> float:
-        """Reads resolution bandwidth (Hz)."""
+        """Reads the resolution bandwidth (Hz)."""
         x = self.comm.query('BWIDth:RESolution?')
-
+        
         # Converts the result to the expected type,
         # if fails, returns the raw string.
         try:
             x = float(x)
         except ValueError:
             x = x.strip()
-
+        
         return x
 
     def set_vbw(self, x: Union[float, str]) -> None:
-        """Sets video bandwidth (Hz)."""
+        """Sets the video bandwidth (Hz)."""
         self.comm.write('BANDwidth:VIDeo %s' % str(x))
 
     def get_vbw(self) -> float:
-        """Reads video bandwidth (Hz)."""
+        """Reads the video bandwidth (Hz)."""
         x = self.comm.query('BANDwidth:VIDeo?')
-
+        
         # Converts the result to the expected type,
         # if fails, returns the raw string.
         try:
             x = float(x)
         except ValueError:
             x = x.strip()
-
+        
         return x
