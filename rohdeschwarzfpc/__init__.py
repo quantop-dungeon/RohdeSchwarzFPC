@@ -1,1 +1,1 @@
-from rohdeschwarzfpc.rohdeschwarzfpc import FPC
+from rohdeschwarzfpc.main import FPC
