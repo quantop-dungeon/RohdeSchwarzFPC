@@ -3,6 +3,7 @@ import numpy as np
 
 from typing import Union
 
+
 class FPC:
     """Class for communication with Rohde & Schwarz FPC spectrum analyzers.
 
@@ -28,7 +29,7 @@ class FPC:
 
         Returns:
             A dictionary with the x and y data (under the keys 'x' and 'y'), 
-            and optionally metadata.
+            and metadata.
         """
 
         d = {'x': None,
@@ -76,7 +77,7 @@ class FPC:
 
     def set_start_freq(self, x: Union[float, str]) -> None:
         """Sets the start frequency (Hz)."""
-        self.comm.write('FREQuency:STARt %s' % str(x))
+        self.comm.write(f'FREQuency:STARt {x}')
 
     def get_start_freq(self) -> float:
         """Reads the start frequency (Hz)."""
@@ -93,7 +94,7 @@ class FPC:
 
     def set_stop_freq(self, x: Union[float, str]) -> None:
         """Sets the stop frequency (Hz)."""
-        self.comm.write('FREQuency:STOP %s' % str(x))
+        self.comm.write(f'FREQuency:STOP {x}')
 
     def get_stop_freq(self) -> float:
         """Reads the stop frequency (Hz)."""
@@ -110,7 +111,7 @@ class FPC:
 
     def set_cent_freq(self, x: Union[float, str]) -> None:
         """Sets the center frequency (Hz)."""
-        self.comm.write('FREQuency:CENTer %s' % str(x))
+        self.comm.write(f'FREQuency:CENTer {x}')
 
     def get_cent_freq(self) -> float:
         """Reads the center frequency (Hz)."""
@@ -127,7 +128,7 @@ class FPC:
 
     def set_span(self, x: Union[float, str]) -> None:
         """Sets the span (Hz)."""
-        self.comm.write('FREQuency:SPAN %s' % str(x))
+        self.comm.write(f'FREQuency:SPAN {x}')
 
     def get_span(self) -> float:
         """Reads the span (Hz)."""
@@ -144,7 +145,7 @@ class FPC:
 
     def set_rbw(self, x: Union[float, str]) -> None:
         """Sets the resolution bandwidth (Hz)."""
-        self.comm.write('BWIDth:RESolution %s' % str(x))
+        self.comm.write(f'BWIDth:RESolution {x}')
 
     def get_rbw(self) -> float:
         """Reads the resolution bandwidth (Hz)."""
@@ -161,7 +162,7 @@ class FPC:
 
     def set_vbw(self, x: Union[float, str]) -> None:
         """Sets the video bandwidth (Hz)."""
-        self.comm.write('BANDwidth:VIDeo %s' % str(x))
+        self.comm.write(f'BANDwidth:VIDeo {x}')
 
     def get_vbw(self) -> float:
         """Reads the video bandwidth (Hz)."""
