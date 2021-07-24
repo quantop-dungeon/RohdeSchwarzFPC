@@ -1,6 +1,7 @@
 import pyvisa
 import numpy as np
 
+from typing import Union
 
 class FPC:
     """Class for communication with Rohde & Schwarz FPC spectrum analyzers.
