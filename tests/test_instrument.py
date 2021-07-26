@@ -5,8 +5,7 @@ from rohdeschwarzfpc import FPC
 
 
 class InstrumentTest(unittest.TestCase):
-    def __init__(self, address=''):
-        self.instrument_address = address
+    instrument_address = 'TCPIP0::172.16.10.10::inst0::INSTR'
 
     def test_init(self):
         s = FPC(self.instrument_address)
@@ -20,13 +19,15 @@ class InstrumentTest(unittest.TestCase):
         tr = s.get_trace(n)
         self.assertEqual(tr['x'].shape, tr['y'].shape)
 
-        plt.semilogy(tr['x'], tr['y'])
-        plt.xlabel('%s (%s)' % (tr['name_x'], tr['unit_x']))
-        plt.ylabel('%s (%s)' % (tr['name_y'], tr['unit_y']))
+        # plt.semilogy(tr['x'], tr['y'])
+        # plt.xlabel('%s (%s)' % (tr['name_x'], tr['unit_x']))
+        # plt.ylabel('%s (%s)' % (tr['name_y'], tr['unit_y']))
 
-    def test_prop_setget(self, set_vals={'cent_freq': 1e6, 'span': 1e5,
-                                         'start_freq': 1e5, 'stop_freq': 2e5,
-                                         'rbw': 1e3, 'vbw': 1e3}):
+    def test_prop_setget(self):
+        set_vals = {'cent_freq': 1e8, 'span': 1e5,
+                    'start_freq': 1.5e8, 'stop_freq': 1.7e8,
+                    'rbw': 1e3, 'vbw': 1e3}
+
         s = FPC(self.instrument_address)
 
         for p in set_vals:
