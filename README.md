@@ -1,4 +1,4 @@
-# Rohde Schwarz FPC python interface
+# A python interface to Rohde Schwarz FPC spectrum analyzers
 A minimalistic class for reading parameters and data from Rohde Schwarz FPC spectrum analyzers. Tested with FPC1500.
 
 ## Installation
