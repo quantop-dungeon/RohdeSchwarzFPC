@@ -13,12 +13,12 @@ where `c:\...\loc` is the folder path.
 ```python
 from rohdeschwarzfpc import FPC
 
-sa = FPC(address=r'TCPIP0::172.16.10.10::inst0::INSTR')
+sa = FPC(address='TCPIP0::172.16.10.10::inst0::INSTR')
 
-# Reads the currently displayed data of the trace 
-# no 1 from the device. x and y are 1D arrays, and 
-# mdt is a dictionary containing the axes names and units.
-# Usually the returned x is in Hz and y is in V^2/Hz.
+# Reads the currently displayed data from the trace no 1
+# of the device. The retuned value tr is a dictionary containing 
+# the data (1D arrays tr['x'] and tr['y']) and the axes names 
+# and units. Usually the returned x is in Hz and y is in V^2/Hz.
 x, y, mdt = sa.get_trace(n=1)
 
 # Reads the center frequency.
