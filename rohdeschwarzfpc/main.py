@@ -1,3 +1,5 @@
+import json
+import os
 import pyvisa
 import numpy as np
 
@@ -7,17 +9,32 @@ from typing import Union
 class FPC:
     """Class for communication with Rohde & Schwarz FPC spectrum analyzers.
 
-    Args:
-        address: Visa resource name.
-
     Attributes:
-        comm: Communication resource that performs read and write operations  
-            on the physical device. 
+        comm: Visa resource that performs read and write operations on 
+            the physical device. 
     """
-    comm = None
 
-    def __init__(self, address: str = r'TCPIP0::172.16.10.10::inst0::INSTR'):
+    def __init__(self, address: str = ''):
+        """" Inits an instance of the instrument class and open communication
+        using the address.
+
+        Args:
+            address: 
+                A visa resource name, e.g. 'TCPIP0::172.16.10.10::inst0::INSTR'.
+                If not supplied explicitly, it is loaded from the config file.
+        """
+
         rm = pyvisa.ResourceManager()
+
+        if not address:
+            c = get_config()
+            
+            if 'address' in c:
+                address = c['address']
+            else:
+                raise ValueError('An instrument address must be supplied '
+                                 'or set in the config file using set_config.')
+
         self.comm = rm.open_resource(address)
 
     def get_trace(self, n: int = 1) -> dict:
@@ -176,3 +193,31 @@ class FPC:
             x = x.strip()
 
         return x
+
+
+def set_config(newc: dict) -> None:
+    """ Adds the content of newc dictionary to the configuration file. """
+
+    c = get_config()
+    c.update(newc)
+
+    # Configurations are stored in the package installation folder.
+    filename = os.path.join(os.path.dirname(__file__), 'config.json')
+
+    with open(filename, 'w') as fp:
+        json.dump(c, fp, indent=1)
+
+
+def get_config() -> dict:
+    """ Returns the content of the configuration file as a dictionary. """
+
+    # Configurations are stored in the package installation folder.
+    filename = os.path.join(os.path.dirname(__file__), 'config.json')
+
+    try:
+        with open(filename, 'r') as fp:
+            c = json.load(fp)
+    except FileNotFoundError:
+        c = {}
+    
+    return c
