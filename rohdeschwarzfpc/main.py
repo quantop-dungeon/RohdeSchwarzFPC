@@ -15,7 +15,7 @@ class FPC:
     """
 
     def __init__(self, address: str = ''):
-        """" Inits an instance of the instrument class and open communication
+        """"Inits an instance of the instrument class and open communication
         using the address.
 
         Args:
@@ -28,7 +28,7 @@ class FPC:
 
         if not address:
             c = get_config()
-            
+
             if 'address' in c:
                 address = c['address']
             else:
@@ -37,12 +37,16 @@ class FPC:
 
         self.comm = rm.open_resource(address)
 
-    def get_trace(self, n: int = 1) -> dict:
+    def get_trace(self, n: int = 1, mem: bool = False) -> dict:
         """Reads a current trace from the instrument. Does not initiate or 
         stop data acquisition.
 
         Args:
-            n: Trace number.
+            n: 
+                Trace number.
+            mem: 
+                Selects between reading a currently displayed trace (False) 
+                and reading a reference stored in the memory (True).
 
         Returns:
             A dictionary with the x and y data (under the keys 'x' and 'y'), 
@@ -56,8 +60,13 @@ class FPC:
              'name_y': '$S_V$',
              'unit_y': ''}  # unit_y will be determined later.
 
+        if mem:
+            kind = ':MEMory'
+        else:
+            kind = ''
+
         # Configures the device for binary data transfer and queries y data.
-        req = 'FORMat REAL,32;:TRACe:DATA? TRACE%i' % n
+        req = 'FORMat REAL,32;:TRACe:DATA%s? TRACE%i' % (kind, n)
         y = self.comm.query_binary_values(req, datatype='f',
                                           container=np.ndarray)
 
@@ -196,7 +205,7 @@ class FPC:
 
 
 def set_config(newc: dict) -> None:
-    """ Adds the content of newc dictionary to the configuration file. """
+    """Adds the content of newc dictionary to the configuration file. """
 
     c = get_config()
     c.update(newc)
@@ -209,7 +218,7 @@ def set_config(newc: dict) -> None:
 
 
 def get_config() -> dict:
-    """ Returns the content of the configuration file as a dictionary. """
+    """Returns the content of the configuration file as a dictionary. """
 
     # Configurations are stored in the package installation folder.
     filename = os.path.join(os.path.dirname(__file__), 'config.json')

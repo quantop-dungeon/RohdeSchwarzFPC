@@ -15,11 +15,14 @@ from rohdeschwarzfpc import FPC
 
 sa = FPC(address='TCPIP0::172.16.10.10::inst0::INSTR')
 
-# Reads the currently displayed data from the trace no 1
-# of the device. The retuned value tr is a dictionary containing 
-# the data (1D arrays tr['x'] and tr['y']) and the axes names 
-# and units. Usually the returned x is in Hz and y is in V^2/Hz.
+# Reads the currently displayed data from the trace no 1. 
+# The retuned value tr is a dictionary containing the data (1D arrays tr['x'] 
+# and tr['y']) and the axes names and units. Usually the returned x is in Hz 
+# and y is in V^2/Hz.
 tr = sa.get_trace(n=1)
+
+# Reads the data from the memory trace no 2.
+tr2 = sa.get_trace(n=2, mem=True)
 
 # Reads the center frequency.
 f = sa.get_cent_freq()
