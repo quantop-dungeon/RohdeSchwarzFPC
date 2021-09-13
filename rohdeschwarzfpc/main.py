@@ -55,10 +55,8 @@ class FPC:
 
         d = {'x': None,
              'y': None,
-             'name_x': 'Frequency',
-             'unit_x': 'Hz',
-             'name_y': '$S_V$',
-             'unit_y': ''}  # unit_y will be determined later.
+             'xlabel': 'Frequency (Hz)',
+             'ylabel': '$S_V$'}  # y unit will be determined later.
 
         if mem:
             kind = ':MEMory'
@@ -86,11 +84,10 @@ class FPC:
 
             # Converts the data to V^2/Hz, assuming 50 Ohm input impedance.
             d['y'] = 50*0.001*(10**(y/10))/float(rbw)
-            d['unit_y'] = 'V$^2$/Hz'
+            d['ylabel'] = ('%s (V$^2$/Hz)' % d['ylabel'])
         else:
             # Leaves the data as it is.
             d['y'] = y
-            d['unit_y'] = unit
 
         return d
 
