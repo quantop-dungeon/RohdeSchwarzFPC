@@ -1,3 +1,5 @@
+import json
+import os
 import pyvisa
 import numpy as np
 
@@ -7,25 +9,44 @@ from typing import Union
 class FPC:
     """Class for communication with Rohde & Schwarz FPC spectrum analyzers.
 
-    Args:
-        address: Visa resource name.
-
     Attributes:
-        comm: Communication resource that performs read and write operations  
-            on the physical device. 
+        comm: Visa resource that performs read and write operations on 
+            the physical device. 
     """
-    comm = None
 
-    def __init__(self, address: str = r'TCPIP0::172.16.10.10::inst0::INSTR'):
+    def __init__(self, address: str = ''):
+        """"Inits an instance of the instrument class and open communication
+        using the address.
+
+        Args:
+            address: 
+                A visa resource name, e.g. 'TCPIP0::172.16.10.10::inst0::INSTR'.
+                If not supplied explicitly, it is loaded from the config file.
+        """
+
         rm = pyvisa.ResourceManager()
+
+        if not address:
+            c = get_config()
+
+            if 'address' in c:
+                address = c['address']
+            else:
+                raise ValueError('An instrument address must be supplied '
+                                 'or set in the config file using set_config.')
+
         self.comm = rm.open_resource(address)
 
-    def get_trace(self, n: int = 1) -> dict:
+    def get_trace(self, n: int = 1, mem: bool = False) -> dict:
         """Reads a current trace from the instrument. Does not initiate or 
         stop data acquisition.
 
         Args:
-            n: Trace number.
+            n: 
+                Trace number.
+            mem: 
+                Selects between reading a currently displayed trace (False) 
+                and reading a reference stored in the memory (True).
 
         Returns:
             A dictionary with the x and y data (under the keys 'x' and 'y'), 
@@ -34,13 +55,16 @@ class FPC:
 
         d = {'x': None,
              'y': None,
-             'name_x': 'Frequency',
-             'unit_x': 'Hz',
-             'name_y': '$S_V$',
-             'unit_y': ''}  # unit_y will be determined later.
+             'xlabel': 'Frequency (Hz)',
+             'ylabel': '$S_V$'}  # y unit will be determined later.
+
+        if mem:
+            kind = ':MEMory'
+        else:
+            kind = ''
 
         # Configures the device for binary data transfer and queries y data.
-        req = 'FORMat REAL,32;:TRACe:DATA? TRACE%i' % n
+        req = 'FORMat REAL,32;:TRACe:DATA%s? TRACE%i' % (kind, n)
         y = self.comm.query_binary_values(req, datatype='f',
                                           container=np.ndarray)
 
@@ -60,11 +84,10 @@ class FPC:
 
             # Converts the data to V^2/Hz, assuming 50 Ohm input impedance.
             d['y'] = 50*0.001*(10**(y/10))/float(rbw)
-            d['unit_y'] = 'V$^2$/Hz'
+            d['ylabel'] = ('%s (V$^2$/Hz)' % d['ylabel'])
         else:
             # Leaves the data as it is.
             d['y'] = y
-            d['unit_y'] = unit
 
         return d
 
@@ -176,3 +199,31 @@ class FPC:
             x = x.strip()
 
         return x
+
+
+def set_config(newc: dict) -> None:
+    """Adds the content of newc dictionary to the configuration file. """
+
+    c = get_config()
+    c.update(newc)
+
+    # Configurations are stored in the package installation folder.
+    filename = os.path.join(os.path.dirname(__file__), 'config.json')
+
+    with open(filename, 'w') as fp:
+        json.dump(c, fp, indent=1)
+
+
+def get_config() -> dict:
+    """Returns the content of the configuration file as a dictionary. """
+
+    # Configurations are stored in the package installation folder.
+    filename = os.path.join(os.path.dirname(__file__), 'config.json')
+
+    try:
+        with open(filename, 'r') as fp:
+            c = json.load(fp)
+    except FileNotFoundError:
+        c = {}
+    
+    return c

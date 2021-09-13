@@ -1,1 +1,1 @@
-from rohdeschwarzfpc.main import FPC
+from rohdeschwarzfpc.main import FPC, set_config, get_config
